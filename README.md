@@ -1,21 +1,10 @@
-Raspberry PI OLED Library Driver
-================================
+Raspberry PI OLED Library Driver for sh1106 spi
+===============================================
 
-This is the port of some of the most used OLED drivers such as the Adafruit, Seeedstudio, Tindie, Generic... to
-the Raspberry Pi. It can drive OLED with chipset such as SSD1306, SH1106, SSD1327 and SSD1308
+These changes correct the corrupt representation on a sh1106 display (128x64) via spi.
 
-This library replace the previous one named [ArduiPi_SSD1306][1]
+Please use the source-code from https://github.com/hallard/ArduiPi_OLED and replace the fixed file from this repostiory...
 
-This has been ported to work with the ArduiPi Project but it can work on almost any Raspberry PI.
-
-
-Installation
-============
-
-Everything is documented on this dedicated [post][2] my [blog][3]
-
-
-[1]: https://github.com/hallard/ArduiPi_SSD1306
-[2]: http://hallard.me/adafruit-oled-display-driver-for-pi/
-[3]: https://hallard.me
+**Important:** Use a new version of bcm2835.c + .h 
+You can download it from here http://www.airspayce.com/mikem/bcm2835/bcm2835-1.58.tar.gz
 

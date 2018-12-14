@@ -358,7 +358,7 @@ boolean ArduiPi_OLED::init(int8_t DC, int8_t RST, int8_t CS, uint8_t OLED_TYPE)
     return false;
 
   // Init & Configure Raspberry PI SPI
-  bcm2835_spi_begin(cs);
+  bcm2835_spi_begin();
   bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);      
   bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);                
   
@@ -892,13 +892,20 @@ void ArduiPi_OLED::display(void)
   // SPI
   if ( isSPI())
   {
-    // Setup D/C line to high to switch to data mode
-    bcm2835_gpio_write(dc, HIGH);
-
     // Send all data to OLED
-    for ( i=0; i<oled_buff_size; i++) 
+    unsigned char setPageAddress = 0xb0;
+    int pages = oled_height / 8;
+    for( int y = 0; y < pages; ++y ) // iterate each page
     {
-      fastSPIwrite(*p++);
+      sendCommand( setPageAddress );
+      sendCommand( SSD1306_Set_Lower_Column_Start_Address | 0x02 ); /*set lower column address*/
+      sendCommand( SSD1306_Set_Higher_Column_Start_Address );     /*set higher column address*/
+      bcm2835_gpio_write( dc, HIGH );
+      setPageAddress++;
+      for( i = 0; i < oled_width; i++ )
+      {
+        fastSPIwrite( *p++ );
+      }
     }
 
     // I wonder why we have to do this (check datasheet)
